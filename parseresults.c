@@ -54,8 +54,9 @@ int main (int argc, char  * argv[] ) {
     char olddate  [20];
     char datestr  [20];
     char oldrank  [20];
+    char symbol_name  [50];
     char *token;
-    const char s[2] = ",";
+    const char s[2] = "|";
     const char *result = NULL;
     int target_linecount=1;
     int results_linecount=1;
@@ -69,7 +70,7 @@ int main (int argc, char  * argv[] ) {
 	debug_flag =1;
     }else {
 	debug_flag =0;
-}
+    }
 
 
     fsnp = fopen("snp.txt", "r");
@@ -77,27 +78,33 @@ int main (int argc, char  * argv[] ) {
       printf ("Error Opening the fsnp file\n");
       return(-1);
     }
+
+    //if ( debug_flag ) { printf ( "snp.txt opened successfully\n"); }
     while( fgets (targetstr, 200, fsnp)!=NULL ) {
 	    targetstr[strlen (targetstr)-1 ] = '\0';
-	    printf ("TARGET >>>>> [%d],  [%s]\n", target_linecount, targetstr);
+	    if ( targetstr[0] == '#' ){
+		continue;
+	    }
+	    if ( debug_flag) {printf ("TARGET snp.txt >>>>> [%d],  [%s]\n", target_linecount, targetstr); }
 	    target_linecount++;
 	
 	    // Open the results file and start reading one line at a time.
 
 	    fresults = fopen("results.txt", "r");
 	    if(fresults == NULL) {
-	      printf ("Error\n");
+	      printf ("Error file results.txt not found ! Exiting - Fix the file name first.\n");
 	      return(-1);
 	    }
+            if ( debug_flag ) { printf ( "results.txt opened successfully"); }
 		
 	    symbol_found_flag=0;
 	    while( fgets (resultsstr, 200, fresults)!=NULL ) {
+		if ( debug_flag ) printf("%s\n",resultsstr);
 		resultsstr[ strlen ( resultsstr) -1 ] = '\0';
-		//printf("%s\n",resultsstr);
 		/* get the date  first token */
 		token = strtok(resultsstr, s);
+		if ( debug_flag ) {printf( " Date from token>>>%s\n", token ); }
 		strcpy ( datestr, token );
-		//printf( " Date>>>%s\n", token );
 
 		// get the symbol
 		token = strtok(NULL, s);
@@ -109,8 +116,11 @@ int main (int argc, char  * argv[] ) {
 			symbol_found_flag++;
 			if ( debug_flag ) {printf ( ">>>>>>>>>>>>> Found [%d] [%s], count[%d] in results\n", results_linecount, targetstr, symbol_found_flag ); }
   			results_linecount++;
-			// get the name
+
+
+			// get the symbol name
 			token = strtok(NULL, s);
+			strcpy ( symbol_name, token );
 			if ( debug_flag) {printf( " Symbolname >>>%s\n", token ); }
 
 			// get the price
@@ -125,11 +135,11 @@ int main (int argc, char  * argv[] ) {
 				strcpy ( oldrank, token );
 			} else {
 				if ( strcmp ( oldrank, token ) != 0 ){ // they are different
-					printf ("[%s] Old rank and New rank are different \n", targetstr);
-					printf ("[%s] Old date [%s], Old rank [%s]\n[%s] New date [%s], New rank [%s] \n", targetstr,olddate, oldrank, targetstr, datestr, token );
+					printf ("[%s] [%s] Old rank and New rank are different \n", targetstr,symbol_name);
+					printf ("[%s] Old date [%s], Old rank [%s]\n[%s] New date [%s], New rank [%s] \n\n", targetstr,olddate, oldrank, targetstr, datestr, token );
 
 				} else {
-					printf ("[%s], No change \n", targetstr);
+					//printf ("[%s], No change \n", targetstr);
 					strcpy ( olddate, datestr);
 					strcpy ( oldrank, token );
 				}
