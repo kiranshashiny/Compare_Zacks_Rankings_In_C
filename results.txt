@@ -1,0 +1,7 @@
+"04/03/23","A","Agilent Technologies - A",138.34,"BUY"
+"04/03/23","MMM","3M - MMM",105.11,"BUY"
+"05/03/23","MMM","3M - MMM",106.11,"BUY"
+"06/03/23","MMM","3M - MMM",106.11,"Strong BUY"
+"04/03/23","ABBV","AbbVie - ABBV",159.37,"HOLD"
+"05/03/23","ABBV","AbbVie - ABBV",160.37,"HOLD"
+"05/03/23","ABBV","AbbVie - ABBV",160.37,"Sell"
