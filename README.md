@@ -20,25 +20,24 @@ ABBV
 The results.txt file has the listings from the database.
 
 ```
-
 $ cat results.txt
-"04/03/23","A","Agilent Technologies - A",138.34,"BUY"
-"04/03/23","MMM","3M - MMM",105.11,"BUY"
-"05/03/23","MMM","3M - MMM",106.11,"BUY"
-"06/03/23","MMM","3M - MMM",106.11,"Strong BUY". <<< Status has changed.
-"04/03/23","ABBV","AbbVie - ABBV",159.37,"HOLD"
-"05/03/23","ABBV","AbbVie - ABBV",160.37,"HOLD"
-"05/03/23","ABBV","AbbVie - ABBV",160.37,"Sell"  <<<<< Status has changed - This will be reported.
-
-```
-
+04/06/23|A|Agilent Technologies - A|138.34|BUY
+04/06/23|AAL|American Airlines - AAL|14.75|BUY
+04/06/23|AAP|Advance Auto Parts - AAP|121.61|SELL
+04/06/23|AAPL|Apple - AAPL|164.9|HOLD
+04/06/23|ABBV|AbbVie - ABBV|159.37|HOLD
+04/06/23|ABC|AmerisourceBergen - ABC|160.11|HOLD
+04/06/23|ABT|Abbott Laboratories - ABT|101.26|HOLD
+04/06/23|ACGL|Arch Capital Group - ACGL|67.87|BUY
+04/06/23|ACN|Accenture - ACN|285.81|HOLD
+04/06/23|ADBE|Adobe - ADBE|385.37|BUY
 
 The results looks like this as shown below, Note the MMM and the ABBV reports the changes.
 
 ```
 
 
-$  ./parseresults 
+$  ./parseresults // Look at the code checked in - that is more accurate. This is just a sample.
 TARGET >>>>> [1],  [MMM]
 [MMM], No change 
 [MMM] Old rank and New rank are different 
