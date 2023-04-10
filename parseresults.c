@@ -3,6 +3,8 @@
 #include <time.h>
 #include <stdlib.h>
 
+#define STRSIZE      50
+#define STRSTOCKNAME 50
 
 char* replaceWord(const char* s, const char* oldW,
                 const char* newW)
@@ -42,7 +44,6 @@ char* replaceWord(const char* s, const char* oldW,
     return result;
 }
 
-
 int main (int argc, char  * argv[] ) {
 
     FILE *fresults;
@@ -62,7 +63,17 @@ int main (int argc, char  * argv[] ) {
     int results_linecount=1;
     int symbol_found_flag=0;
     int debug_flag =0;
+    int rank_changed =0;
 
+    struct MyStructure {   // Structure declaration
+	   char Date[STRSIZE];  
+	   char StockName[STRSIZE];
+	   char StockSymbol [STRSTOCKNAME];
+	   float StockPrice; 
+	   char StockRank[STRSIZE]; 
+    };
+
+    struct MyStructure arrayOfStocks[5];
 
     if ( argc >1 ) {
 
@@ -97,59 +108,80 @@ int main (int argc, char  * argv[] ) {
 	    }
             if ( debug_flag ) { printf ( "results.txt opened successfully"); }
 		
-	    symbol_found_flag=0;
+	    symbol_found_flag=1;
+	    rank_changed =0;
 	    while( fgets (resultsstr, 200, fresults)!=NULL ) {
-		if ( debug_flag ) printf("%s\n",resultsstr);
+		//if ( debug_flag ) printf("%s\n",resultsstr);
 		resultsstr[ strlen ( resultsstr) -1 ] = '\0';
+
 		/* get the date  first token */
 		token = strtok(resultsstr, s);
-		if ( debug_flag ) {printf( " Date from token>>>%s\n", token ); }
+		//if ( debug_flag ) {printf( " Date from token>>>%s\n", token ); }
 		strcpy ( datestr, token );
 
 		// get the symbol
 		token = strtok(NULL, s);
 		result = replaceWord(token, "\"", "");
-		if ( debug_flag) {printf( "Symbol being processed in results file >>>%s\n", result ); }
+		//if ( debug_flag) {printf( "Symbol being processed in results file >>>%s\n", result ); }
 
 		// result contains SYMBOL
 		if ( strcmp ( result, targetstr ) == 0) {
-			symbol_found_flag++;
-			if ( debug_flag ) {printf ( ">>>>>>>>>>>>> Found [%d] [%s], count[%d] in results\n", results_linecount, targetstr, symbol_found_flag ); }
+			if ( debug_flag ) {printf ( ">>>>>>>>>>>>> Found [%d] [%s], count[%d] in results.txt\n", results_linecount, targetstr, symbol_found_flag ); }
   			results_linecount++;
 
+			strcpy( arrayOfStocks[symbol_found_flag].Date,        datestr );
+			strcpy( arrayOfStocks[symbol_found_flag].StockSymbol, result );
 
 			// get the symbol name
 			token = strtok(NULL, s);
 			strcpy ( symbol_name, token );
+
+			if ( debug_flag) {printf( " date >>>%s\n", datestr ); }
 			if ( debug_flag) {printf( " Symbolname >>>%s\n", token ); }
 
 			// get the price
 			token = strtok(NULL, s);
 			if ( debug_flag) {printf( " price >>>%s\n", token );}
+			arrayOfStocks[symbol_found_flag].StockPrice = atof ( token );
 
 			// get the rank
 			token = strtok(NULL, s);
 			if ( debug_flag) {printf( " rank >>>%s\n", token );}
+			strcpy( arrayOfStocks[symbol_found_flag].StockRank, token );
+
+			// first time- so just dont do anything - just save data.
 			if( symbol_found_flag == 1) {
 				strcpy ( olddate, datestr );
 				strcpy ( oldrank, token );
 			} else {
 				if ( strcmp ( oldrank, token ) != 0 ){ // they are different
+				        rank_changed = 1;
 					printf ("[%s] [%s] Old rank and New rank are different \n", targetstr,symbol_name);
 					printf ("[%s] Old date [%s], Old rank [%s]\n[%s] New date [%s], New rank [%s] \n\n", targetstr,olddate, oldrank, targetstr, datestr, token );
+					strcpy ( olddate, datestr);
+					strcpy ( oldrank, token );
 
 				} else {
 					//printf ("[%s], No change \n", targetstr);
 					strcpy ( olddate, datestr);
 					strcpy ( oldrank, token );
 				}
-
 			}
-		} 
+			symbol_found_flag++;
+		}
 
-	     }
+	     } // inner while results loop.
+
+	     //printf ( "Number of times the symbol [%s] was found [%d]\n", targetstr, symbol_found_flag-1 );
+	     if (rank_changed ) {
+		     for ( int i=1; i< symbol_found_flag; i++ ) {
+			printf ("%s %s %.2f %s\n", arrayOfStocks[i].Date, arrayOfStocks[i].StockSymbol , arrayOfStocks[i].StockPrice, arrayOfStocks[i].StockRank);
+		     }
+		     printf ("\n");
+	     } // end of the rank_changed.
+
 	     fclose (fresults ); 
-    }
+	} // big while loop.
 
     fclose ( fresults);
     fclose ( fsnp);
