@@ -34,8 +34,6 @@ $ cat results.txt
 
 The results looks like this as shown below, Note the MMM and the ABBV reports the changes.
 
-```
-
 
 $  ./parseresults // Look at the code checked in - that is more accurate. This is just a sample.
 TARGET >>>>> [1],  [MMM]
