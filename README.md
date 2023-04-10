@@ -1,4 +1,4 @@
-# Compare_zacks_rankings_in_C
+# Compare_Zacks_Rankings_in_C
 
 This code compares the results for every stock and determines if there is a change in ranking and reports it.
 
