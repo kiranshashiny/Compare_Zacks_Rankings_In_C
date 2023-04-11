@@ -67,8 +67,8 @@ int main (int argc, char  * argv[] ) {
 
     struct MyStructure {   // Structure declaration
 	   char Date[STRSIZE];  
-	   char StockName[STRSIZE];
-	   char StockSymbol [STRSTOCKNAME];
+	   char StockSymbol[STRSIZE];
+	   char StockName [STRSTOCKNAME];
 	   float StockPrice; 
 	   char StockRank[STRSIZE]; 
     };
@@ -135,6 +135,7 @@ int main (int argc, char  * argv[] ) {
 			// get the symbol name
 			token = strtok(NULL, s);
 			strcpy ( symbol_name, token );
+			strcpy( arrayOfStocks[symbol_found_flag].StockName, symbol_name );
 
 			if ( debug_flag) {printf( " date >>>%s\n", datestr ); }
 			if ( debug_flag) {printf( " Symbolname >>>%s\n", token ); }
@@ -175,7 +176,7 @@ int main (int argc, char  * argv[] ) {
 	     //printf ( "Number of times the symbol [%s] was found [%d]\n", targetstr, symbol_found_flag-1 );
 	     if (rank_changed ) {
 		     for ( int i=1; i< symbol_found_flag; i++ ) {
-			printf ("%s %s %.2f %s\n", arrayOfStocks[i].Date, arrayOfStocks[i].StockSymbol , arrayOfStocks[i].StockPrice, arrayOfStocks[i].StockRank);
+			printf ("%s|%s|%s|%.2f|%s\n", arrayOfStocks[i].Date, arrayOfStocks[i].StockSymbol, arrayOfStocks[i].StockName, arrayOfStocks[i].StockPrice, arrayOfStocks[i].StockRank);
 		     }
 		     printf ("\n");
 	     } // end of the rank_changed.
